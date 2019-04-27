@@ -1,0 +1,4 @@
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+INSERT INTO cards VALUES(@cardId,@noteId,@deckId,0,1413830378,-1,0,0,1,0,2500,0,0,1001,0,0,0,'');
+COMMIT;

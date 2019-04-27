@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <StartupObject>consoleApp.Program</StartupObject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.9.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ApkgCreator\ApkgCreator.csproj" />
+    <ProjectReference Include="..\Cards\Cards.csproj" />
+    <ProjectReference Include="..\OxfordDictionariesRetriever\OxfordDictionariesRetriever.csproj" />
+  </ItemGroup>
+
+</Project>
