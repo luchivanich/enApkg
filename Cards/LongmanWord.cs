@@ -3,6 +3,7 @@ using Newtonsoft.Json.Converters;
 
 namespace Cards
 {
+    // TODO: Rename. Rework
     public class LongmanWord
     {
         public string Word { get; set; }

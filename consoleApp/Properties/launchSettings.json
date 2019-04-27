@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "consoleApp": {
+      "commandName": "Project",
+      "commandLineArgs": "-p test.json -o E:\\programming\\longman9000\\output\\test"
+    }
+  }
+}

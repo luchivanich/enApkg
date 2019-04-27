@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OxfordDictionariesRetriever
+namespace OxfordDictionaries
 {
     public class CachedItem
     {

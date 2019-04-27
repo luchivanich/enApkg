@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Cards
 {
-    public class CardDbService : ICardDbService
+    public class CardDbService : ICardsDbService
     {
         public Card GetCard(string word)
         {

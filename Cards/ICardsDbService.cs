@@ -2,7 +2,7 @@
 
 namespace Cards
 {
-    public interface ICardDbService
+    public interface ICardsDbService
     {
         void SaveCard(CardsDbContext db, Card card);
         Card GetCard(string word);

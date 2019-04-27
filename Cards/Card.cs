@@ -11,7 +11,7 @@ namespace Cards
 
         public string Definition { get; set; }
 
-        [ForeignKey("Example")]
+        [ForeignKey("Examples")]
         public List<Example> Examples { get; set; }
     }
 }

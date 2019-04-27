@@ -2,6 +2,7 @@
 {
     public interface ICardBuilder
     {
-        Card BuildCard(LongmanWord word);
+        Card BuildNewCard(LongmanWord word);
+        void BuildCard(Card card, LongmanWord word);
     }
 }

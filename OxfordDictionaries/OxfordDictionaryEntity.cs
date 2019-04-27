@@ -6,7 +6,7 @@
 //
 //    var oxfordDictionaryEntity = OxfordDictionaryEntity.FromJson(jsonString);
 
-namespace OxfordDictionariesRetriever
+namespace OxfordDictionaries
 {
     using System;
     using System.Collections.Generic;
