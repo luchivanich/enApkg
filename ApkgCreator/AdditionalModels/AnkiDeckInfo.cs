@@ -6,18 +6,17 @@
 //
 //    var ankiDeckInfo = AnkiDeckInfo.FromJson(jsonString);
 
-namespace ApkgCreator
+namespace ApkgCreator.AdditionalModels
 {
     using System.Collections.Generic;
     using Newtonsoft.Json;
 
     public class AnkiDeckInfo
     {
-        [JsonProperty("@deckId")]
-        public DeckId DeckId { get; set; }
+        public Deck Deck { get; set; }
     }
 
-    public class DeckId
+    public class Deck
     {
         [JsonProperty("desc")]
         public string Desc { get; set; }

@@ -6,7 +6,7 @@
 //
 //    var ankiModel = AnkiModel.FromJson(jsonString);
 
-namespace ApkgCreator
+namespace ApkgCreator.AdditionalModels
 {
     using System.Collections.Generic;
     using Newtonsoft.Json;

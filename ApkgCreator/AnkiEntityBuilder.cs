@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using ApkgCreator.DataModels;
 using Cards;
 
 namespace ApkgCreator
@@ -7,18 +8,19 @@ namespace ApkgCreator
     public class AnkiEntityBuilder : IAnkiEntityBuilder
     {
         private IAnkiFieldsBuilder _ankiFieldsBuilder;
+        private IAnkiAdditionalModelsBuilder _ankiAdditionalModelsBuilder;
 
-        public AnkiEntityBuilder(IAnkiFieldsBuilder ankiFieldsBuilder)
+        public AnkiEntityBuilder(IAnkiFieldsBuilder ankiFieldsBuilder, IAnkiAdditionalModelsBuilder ankiAdditionalModelsBuilder)
         {
             _ankiFieldsBuilder = ankiFieldsBuilder;
+            _ankiAdditionalModelsBuilder = ankiAdditionalModelsBuilder;
         }
 
         public AnkiCol BuildAnkiCol(long deckId, long modelId)
         {
-            var conf = File.ReadAllText(@"col.conf.txt");
+            var conf = _ankiAdditionalModelsBuilder.BuildAnkiCol();
             var dconf = File.ReadAllText(@"col.dconf.txt");
-            var decks = File.ReadAllText(@"col.decks.txt");
-            decks = decks.Replace("@deckId", deckId.ToString());
+            var decks = _ankiAdditionalModelsBuilder.BuildAnkiDeckInfo(deckId, "MAIN DECK!!!");
             var models = File.ReadAllText(@"col.models.txt");
             models = models.Replace("@modelId", modelId.ToString());
 

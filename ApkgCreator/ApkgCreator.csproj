@@ -15,9 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="col.conf.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="col.dconf.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,4 +1,5 @@
-﻿using Cards;
+﻿using ApkgCreator.DataModels;
+using Cards;
 
 namespace ApkgCreator
 {

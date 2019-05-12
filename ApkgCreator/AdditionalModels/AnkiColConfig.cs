@@ -6,7 +6,7 @@
 //
 //    var ankiColConfig = AnkiColConfig.FromJson(jsonString);
 
-namespace ApkgCreator
+namespace ApkgCreator.AdditionalModels
 {
     using System;
     using System.Collections.Generic;
@@ -55,28 +55,5 @@ namespace ApkgCreator
 
         [JsonProperty("collapseTime")]
         public long CollapseTime { get; set; }
-    }
-
-    public partial class AnkiColConfig
-    {
-        public static AnkiColConfig FromJson(string json) => JsonConvert.DeserializeObject<AnkiColConfig>(json, ApkgCreator.Converter.Settings);
-    }
-
-    public static class Serialize
-    {
-        public static string ToJson(this AnkiColConfig self) => JsonConvert.SerializeObject(self, ApkgCreator.Converter.Settings);
-    }
-
-    internal static class Converter
-    {
-        public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
-        {
-            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
-            DateParseHandling = DateParseHandling.None,
-            Converters =
-            {
-                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
-            },
-        };
     }
 }

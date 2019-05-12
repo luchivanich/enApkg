@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ApkgCreator
+namespace ApkgCreator.DataModels
 {
     [Table("graves")]
     public class AnkiGraves

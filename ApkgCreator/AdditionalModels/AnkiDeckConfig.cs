@@ -6,7 +6,7 @@
 //
 //    var ankiDeckConfig = AnkiDeckConfig.FromJson(jsonString);
 
-namespace ApkgCreator
+namespace ApkgCreator.AdditionalModels
 {
     using System;
     using System.Collections.Generic;
@@ -121,10 +121,5 @@ namespace ApkgCreator
 
         [JsonProperty("minSpace")]
         public long MinSpace { get; set; }
-    }
-
-    public partial class AnkiDeckConfig
-    {
-        public static AnkiDeckConfig FromJson(string json) => JsonConvert.DeserializeObject<AnkiDeckConfig>(json, ApkgCreator.Converter.Settings);
     }
 }
