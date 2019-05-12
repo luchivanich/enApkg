@@ -19,12 +19,11 @@ namespace ApkgCreator
         public AnkiCol BuildAnkiCol(long deckId, long modelId)
         {
             var conf = _ankiAdditionalModelsBuilder.BuildAnkiCol();
-            var dconf = File.ReadAllText(@"col.dconf.txt");
+            var dconf = _ankiAdditionalModelsBuilder.BuildAnkiDeckConfig(1);
             var decks = _ankiAdditionalModelsBuilder.BuildAnkiDeckInfo(deckId, "MAIN DECK!!!");
             var models = File.ReadAllText(@"col.models.txt");
             models = models.Replace("@modelId", modelId.ToString());
-
-            var tags = File.ReadAllText(@"col.tags.txt");
+            var tags = "{}";
 
             return new AnkiCol()
             {

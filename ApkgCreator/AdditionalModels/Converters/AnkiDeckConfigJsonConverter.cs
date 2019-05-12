@@ -4,9 +4,9 @@ using Newtonsoft.Json.Linq;
 
 namespace ApkgCreator.AdditionalModels.Converters
 {
-    class AnkiDeckInfoJsonConverter : JsonConverter
+    class AnkiDeckConfigJsonConverter : JsonConverter
     {
-        public override bool CanConvert(Type t) => t == typeof(AnkiDeckInfo);
+        public override bool CanConvert(Type t) => t == typeof(AnkiDeckConfig);
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
@@ -15,10 +15,10 @@ namespace ApkgCreator.AdditionalModels.Converters
 
         public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
         {
-            if (untypedValue is AnkiDeckInfo ankiDeckInfo)
+            if (untypedValue is AnkiDeckConfig ankiDeckConfig)
             {
                 var jo = new JObject();
-                jo.Add(ankiDeckInfo.Deck.Id, JToken.FromObject(ankiDeckInfo.Deck));
+                jo.Add(ankiDeckConfig.DeckConfig.Id.ToString(), JToken.FromObject(ankiDeckConfig.DeckConfig));
                 jo.WriteTo(writer);
                 return;
             }

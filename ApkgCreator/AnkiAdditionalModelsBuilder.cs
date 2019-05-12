@@ -28,9 +28,56 @@ namespace ApkgCreator
             return JsonConvert.SerializeObject(ankiColConfig);
         }
 
+        public string BuildAnkiDeckConfig(long configId)
+        {
+            var ankiDeckConfig = new AnkiDeckConfig
+            {
+                DeckConfig = new DeckConfig
+                {
+                    Name = "Default",
+                    Replayq = true,
+                    Lapse = new Lapse
+                    {
+                        LeechFails = 8,
+                        MinInt = 1,
+                        Delays = new List<long> { 10 },
+                        LeechAction = 0,
+                        Mult = 0
+                    },
+                    Rev = new Rev
+                    {
+                        PerDay = 100,
+                        Fuzz = 0.05,
+                        IvlFct = 1,
+                        MaxIvl = 36500,
+                        Ease4 = 1.3,
+                        Bury = true,
+                        MinSpace = 1
+                    },
+                    Timer = 0,
+                    MaxTaken = 60,
+                    Usn = 0,
+                    New = new NewItem
+                    {
+                        PerDay = 20,
+                        Delays = new List<long> { 1, 10 },
+                        Separate = true,
+                        Ints = new List<long> { 1, 4, 7 },
+                        InitialFactor = 2500,
+                        Bury = true,
+                        Order = 1
+                    },
+                    Mod = 0,
+                    Id = configId,
+                    Autoplay = true
+                }
+            };
+            return JsonConvert.SerializeObject(ankiDeckConfig, new AnkiDeckConfigJsonConverter());
+        }
+
         public string BuildAnkiDeckInfo(long deckId, string deckName)
         {
-            var ankiDeckConfig = new AnkiDeckInfo
+            var ankiDeckInfo = new AnkiDeckInfo
             {
                 Deck = new Deck
                 {
@@ -50,8 +97,16 @@ namespace ApkgCreator
                     Mod = 1413830276
                 }
             };
+            return JsonConvert.SerializeObject(ankiDeckInfo, new AnkiDeckInfoJsonConverter());
+        }
 
-            return JsonConvert.SerializeObject(ankiDeckConfig, new AnkiDeckInfoJsonConverter());
+        public string BuildAnkiModel()
+        {
+            var ankiModel = new AnkiModel
+            {
+
+            };
+            return JsonConvert.SerializeObject(ankiModel, new AnkiDeckInfoJsonConverter());
         }
     }
 }

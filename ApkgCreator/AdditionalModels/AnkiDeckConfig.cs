@@ -8,20 +8,15 @@
 
 namespace ApkgCreator.AdditionalModels
 {
-    using System;
     using System.Collections.Generic;
-
-    using System.Globalization;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
-
+    
     public partial class AnkiDeckConfig
     {
-        [JsonProperty("1")]
-        public The1 The1 { get; set; }
+        public DeckConfig DeckConfig { get; set; }
     }
 
-    public partial class The1
+    public partial class DeckConfig
     {
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -45,7 +40,7 @@ namespace ApkgCreator.AdditionalModels
         public long Usn { get; set; }
 
         [JsonProperty("new")]
-        public New New { get; set; }
+        public NewItem New { get; set; }
 
         [JsonProperty("mod")]
         public long Mod { get; set; }
@@ -75,7 +70,7 @@ namespace ApkgCreator.AdditionalModels
         public long Mult { get; set; }
     }
 
-    public partial class New
+    public partial class NewItem
     {
         [JsonProperty("perDay")]
         public long PerDay { get; set; }

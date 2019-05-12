@@ -15,13 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="col.dconf.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="col.models.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="col.tags.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="collection.col.sql">
