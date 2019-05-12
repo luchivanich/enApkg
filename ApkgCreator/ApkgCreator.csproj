@@ -18,9 +18,6 @@
     <None Update="col.dconf.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="col.decks.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="col.models.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
