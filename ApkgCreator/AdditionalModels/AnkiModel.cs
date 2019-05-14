@@ -13,7 +13,6 @@ namespace ApkgCreator.AdditionalModels
 
     public class AnkiModel
     {
-        [JsonProperty("@modelId")]
         public Model Model { get; set; }
     }
 

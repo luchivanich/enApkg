@@ -5,5 +5,6 @@
         string BuildAnkiCol();
         string BuildAnkiDeckConfig(long configId);
         string BuildAnkiDeckInfo(long deckId, string deckName);
+        string BuildAnkiModel(long modelId);
     }
 }

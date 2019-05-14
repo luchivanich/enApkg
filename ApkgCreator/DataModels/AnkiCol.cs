@@ -11,7 +11,7 @@ namespace ApkgCreator.DataModels
         public int Id { get; set; } // seems to be an autoincrement
 
         [Column("crt")]
-        public int Created { get; set; } // there's the created timestamp
+        public long Created { get; set; } // there's the created timestamp
 
         [Column("mod")]
         public long Modified { get; set; } // last modified in milliseconds

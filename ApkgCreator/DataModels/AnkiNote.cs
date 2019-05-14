@@ -17,7 +17,7 @@ namespace ApkgCreator.DataModels
         public long ModleId { get; set; } //model id
 
         [Column("mod")]
-        public int Modified { get; set; } //modified timestamp, epoch seconds
+        public long Modified { get; set; } //modified timestamp, epoch seconds
 
         [Column("usn")]
         public int Usn { get; set; } //-1 for all my notes

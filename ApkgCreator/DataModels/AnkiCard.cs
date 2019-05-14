@@ -20,7 +20,7 @@ namespace ApkgCreator.DataModels
         public int Ordinal { get; set; } // ordinal, seems like. for when a model has multiple templates, or thereabouts
 
         [Column("mod")]
-        public int ModifiedTime { get; set; } // modified time as epoch seconds
+        public long ModifiedTime { get; set; } // modified time as epoch seconds
 
         [Column("usn")]
         public int Usn { get; set; } // "From the source code it appears Anki increments this number each time you synchronize with AnkiWeb and applies this number to the cards that were synchronized. My database is up to 1230 for the collection and my cards have various numbers up to 1229." -- contributed by Fletcher Moore

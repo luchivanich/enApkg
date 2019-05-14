@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using ApkgCreator.DataModels;
 using Cards;
 
@@ -18,19 +17,21 @@ namespace ApkgCreator
 
         public AnkiCol BuildAnkiCol(long deckId, long modelId)
         {
+            var epoch = new DateTimeOffset().ToUnixTimeSeconds();
+            var epochMiliseconds = new DateTimeOffset().ToUnixTimeMilliseconds();
+
             var conf = _ankiAdditionalModelsBuilder.BuildAnkiCol();
             var dconf = _ankiAdditionalModelsBuilder.BuildAnkiDeckConfig(1);
-            var decks = _ankiAdditionalModelsBuilder.BuildAnkiDeckInfo(deckId, "MAIN DECK!!!");
-            var models = File.ReadAllText(@"col.models.txt");
-            models = models.Replace("@modelId", modelId.ToString());
+            var decks = _ankiAdditionalModelsBuilder.BuildAnkiDeckInfo(deckId, $"Deck{DateTime.Now.ToBinary()}");
+            var models = _ankiAdditionalModelsBuilder.BuildAnkiModel(modelId);
             var tags = "{}";
 
             return new AnkiCol()
             {
                 Id = 1,
-                Created = 1413766800,
-                Modified = 1413830407602,
-                SchemaModeTime = 1413830406248,
+                Created = epoch,
+                Modified = epochMiliseconds,
+                SchemaModeTime = epochMiliseconds,
                 Ver = 11,
                 Dty = 0,
                 Usn = 0,
@@ -46,12 +47,13 @@ namespace ApkgCreator
         public AnkiCard BuildAnkiCard(Card card, long deckId, long modelId)
         {
             var fields = _ankiFieldsBuilder.BuildFields(card);
+            var epoch = new DateTimeOffset().ToUnixTimeSeconds();
 
             var ankiNote = new AnkiNote
             {
                 Guid = Guid.NewGuid().ToString(),
                 ModleId = modelId,
-                Modified = 1413830378,
+                Modified = epoch,
                 Usn = -1,
                 Tags = string.Empty,
                 Fields = fields,
@@ -66,7 +68,7 @@ namespace ApkgCreator
                 Note = ankiNote,
                 DeckId = deckId,
                 Ordinal = 0,
-                ModifiedTime = 1413830378,
+                ModifiedTime = epoch,
                 Usn = -1,
                 Type = 0,
                 Queue = 0,

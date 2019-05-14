@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using ApkgCreator.AdditionalModels;
 using ApkgCreator.AdditionalModels.Converters;
 using Newtonsoft.Json;
@@ -100,13 +101,117 @@ namespace ApkgCreator
             return JsonConvert.SerializeObject(ankiDeckInfo, new AnkiDeckInfoJsonConverter());
         }
 
-        public string BuildAnkiModel()
+        public string BuildAnkiModel(long modelId)
         {
+            var questionTemplate = File.ReadAllText(@"Templates/QuetionTemplate.htm");
+            var answerTemplate = File.ReadAllText(@"Templates/AnswerTemplate.htm");
+            var styles = File.ReadAllText(@"Templates/Styles.css");
+
             var ankiModel = new AnkiModel
             {
-
+                Model = new Model
+                {
+                    Vers = null,
+                    Name = "Main",
+                    Tags = null,
+                    Did = 1399112064926,
+                    Usn = -1,
+                    Flds = new List<Fld>
+                    {
+                        new Fld
+                        {
+                            Name = "№",
+                            Media = null,
+                            Sticky = false,
+                            Rtl = false,
+                            Ord = 0,
+                            Font = "Arial",
+                            Size = 20
+                        },
+                        new Fld
+                        {
+                            Name = "IMG",
+                            Media = null,
+                            Sticky = false,
+                            Rtl = false,
+                            Ord = 1,
+                            Font = "Arial",
+                            Size = 20
+                        },
+                        new Fld
+                        {
+                            Name = "English",
+                            Media = null,
+                            Sticky = false,
+                            Rtl = false,
+                            Ord = 2,
+                            Font = "Arial",
+                            Size = 20
+                        },
+                        new Fld
+                        {
+                            Name = "Keyword",
+                            Media = null,
+                            Sticky = false,
+                            Rtl = false,
+                            Ord = 3,
+                            Font = "Arial",
+                            Size = 20
+                        },
+                        new Fld
+                        {
+                            Name = "Transcription",
+                            Media = null,
+                            Sticky = false,
+                            Rtl = false,
+                            Ord = 4,
+                            Font = "Lucida Sans Unicode",
+                            Size = 20
+                        },
+                        new Fld
+                        {
+                            Name = "Russian",
+                            Media = null,
+                            Sticky = false,
+                            Rtl = false,
+                            Ord = 5,
+                            Font = "Arial Unicode MS",
+                            Size = 20
+                        },
+                         new Fld
+                        {
+                            Name = "Sound",
+                            Media = null,
+                            Sticky = false,
+                            Rtl = false,
+                            Ord = 6,
+                            Font = "Arial",
+                            Size = 20
+                        }
+                    },
+                    Sortf = 0,
+                    Tmpls = new List<Tmpl>
+                    {
+                        new Tmpl
+                        {
+                            Name = "Cloze",
+                            Qfmt = questionTemplate,
+                            Did = null,
+                            Bafmt = string.Empty,
+                            Afmt = answerTemplate,
+                            Ord = 0,
+                            Bqfmt = string.Empty
+                        }
+                    },
+                    Mod = 1413830391,
+                    LatexPost = "\\end{document}",
+                    Type = 1,
+                    Id = modelId.ToString(),
+                    Css = styles,
+                    LatexPre = "\\documentclass[12pt]{article}\n\\special{papersize=3in,5in}\n\\usepackage[utf8]{inputenc}\n\\usepackage{amssymb,amsmath}\n\\pagestyle{empty}\n\\setlength{\\parindent}{0in}\n\\begin{document}\n"
+                }
             };
-            return JsonConvert.SerializeObject(ankiModel, new AnkiDeckInfoJsonConverter());
+            return JsonConvert.SerializeObject(ankiModel, new AnkiModelJsonConverter());
         }
     }
 }
