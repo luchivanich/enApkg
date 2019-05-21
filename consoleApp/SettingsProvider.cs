@@ -6,7 +6,7 @@ using OxfordDictionaries;
 
 namespace consoleApp
 {
-    class SettingsProvider : ICardsDbConnectionStringProvider, IOxfordCacheDbConnectionStringProvider, IOxfordDictionarySettingsProvider
+    class SettingsProvider : IOxfordDictionarySettingsProvider
     {
         private const string _appsettingsFile = "appsettings.json";
         private const string _cardsDatabaseSettingName = "CardsDatabase";
@@ -22,6 +22,9 @@ namespace consoleApp
               .AddUserSecrets<SettingsProvider>();
 
             _configuration = builder.Build();
+
+            Environment.SetEnvironmentVariable(CardsConstants.CardsDbConnectionStringEnvironmentVariableName, _configuration.GetConnectionString(_cardsDatabaseSettingName));
+            Environment.SetEnvironmentVariable(OxfordDictionariesConstants.OxfordCacheDbConnectionStringEnvironmentVariableName, _configuration.GetConnectionString(_oxfordDictionaryCacheDatabaseSettingName));
         }
 
         private T LoadSettings<T>(string sectionName)
@@ -29,16 +32,6 @@ namespace consoleApp
             var result = (T)Activator.CreateInstance(typeof(T));
             _configuration.GetSection(sectionName).Bind(result);
             return result;
-        }
-
-        public string GetCardsDbConnectionString()
-        {
-            return _configuration.GetConnectionString(_cardsDatabaseSettingName);
-        }
-
-        public string GetOxfordCacheDbConnectionString()
-        {
-            return _configuration.GetConnectionString(_oxfordDictionaryCacheDatabaseSettingName);
         }
 
         public OxfordDictionarySettings GetOxfordDictionarySettings()

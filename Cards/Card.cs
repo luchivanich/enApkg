@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -13,5 +14,9 @@ namespace Cards
 
         [ForeignKey("Examples")]
         public List<Example> Examples { get; set; }
+
+        public string AudioFileUri { get; set; }
+
+        public string Translation { get; set; }
     }
 }

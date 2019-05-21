@@ -14,17 +14,16 @@ namespace consoleApp
 
             builder.RegisterType<Application>().As<IApplication>();
             builder.RegisterType<SettingsProvider>()
-                .As<ICardsDbConnectionStringProvider>()
-                .As<IOxfordCacheDbConnectionStringProvider>()
                 .As<IOxfordDictionarySettingsProvider>()
                 .SingleInstance();
-            builder.RegisterType<OxfordDictionariesCacheDBContext>().As<IOxfordDictionariesCacheDBContext>().SingleInstance();
+            builder.RegisterType<OxfordDictionariesCacheDbContext>().As<IOxfordDictionariesCacheDBContext>().SingleInstance();
             builder.RegisterType<CardsProcessor>().As<ICardsProcessor>();
             builder.RegisterType<CardBuilder>().As<ICardBuilder>();
-            builder.Register(ctx => new CardsDbContext(ctx.Resolve<ICardsDbConnectionStringProvider>())).As<ICardsDbContext>().SingleInstance();
+            builder.RegisterType<CardsDbContext>().As<ICardsDbContext>();
             builder.RegisterType<OxfordDictionariesRetriever>()
                 .As<IDefinitionRetriever>()
                 .As<IExamplesRetriever>()
+                .As<IAudioFileUrlRetriever>()
                 .SingleInstance();
             builder.RegisterType<AnkiPackageDbContext>().As<IAnkiPackageDbContext>();
             builder.RegisterType<AnkiFieldsBuilder>().As<IAnkiFieldsBuilder>();

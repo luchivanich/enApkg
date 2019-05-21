@@ -1,5 +1,6 @@
 ﻿using Cards;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -7,7 +8,7 @@ using System.Threading;
 
 namespace OxfordDictionaries
 {
-    public class OxfordDictionariesRetriever : IDefinitionRetriever, IExamplesRetriever
+    public class OxfordDictionariesRetriever : IDefinitionRetriever, IExamplesRetriever, IAudioFileUrlRetriever
     {
         private const string DEFINITIONS_ENDPOINT = @"/entries/{source_lang}/{word_id}/definitions";
 
@@ -91,6 +92,17 @@ namespace OxfordDictionaries
         public List<string> GetExamples(LongmanWord word)
         {
             return GetWordSense(word)?.Examples?.Select(e => e.Text).ToList();
+        }
+
+        public Uri GetAudioFileUri(LongmanWord word)
+        {
+            var entity = RetrieveOxfordDictionaryEntity(word.Word);
+            return entity?
+                .Results?
+                .FirstOrDefault()?
+                .LexicalEntries?
+                .FirstOrDefault(i => i.LexicalCategory == word.LexicalCategory.ToString() || word.LexicalCategory == null)?
+                .Pronunciations?.FirstOrDefault()?.AudioFile;
         }
 
         private Sense GetWordSense(LongmanWord word)

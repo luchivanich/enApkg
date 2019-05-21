@@ -118,83 +118,21 @@ namespace ApkgCreator
                     Usn = -1,
                     Flds = new List<Fld>
                     {
-                        new Fld
-                        {
-                            Name = "№",
-                            Media = null,
-                            Sticky = false,
-                            Rtl = false,
-                            Ord = 0,
-                            Font = "Arial",
-                            Size = 20
-                        },
-                        new Fld
-                        {
-                            Name = "IMG",
-                            Media = null,
-                            Sticky = false,
-                            Rtl = false,
-                            Ord = 1,
-                            Font = "Arial",
-                            Size = 20
-                        },
-                        new Fld
-                        {
-                            Name = "English",
-                            Media = null,
-                            Sticky = false,
-                            Rtl = false,
-                            Ord = 2,
-                            Font = "Arial",
-                            Size = 20
-                        },
-                        new Fld
-                        {
-                            Name = "Keyword",
-                            Media = null,
-                            Sticky = false,
-                            Rtl = false,
-                            Ord = 3,
-                            Font = "Arial",
-                            Size = 20
-                        },
-                        new Fld
-                        {
-                            Name = "Transcription",
-                            Media = null,
-                            Sticky = false,
-                            Rtl = false,
-                            Ord = 4,
-                            Font = "Lucida Sans Unicode",
-                            Size = 20
-                        },
-                        new Fld
-                        {
-                            Name = "Russian",
-                            Media = null,
-                            Sticky = false,
-                            Rtl = false,
-                            Ord = 5,
-                            Font = "Arial Unicode MS",
-                            Size = 20
-                        },
-                         new Fld
-                        {
-                            Name = "Sound",
-                            Media = null,
-                            Sticky = false,
-                            Rtl = false,
-                            Ord = 6,
-                            Font = "Arial",
-                            Size = 20
-                        }
+                        CreateFld("№", 0),
+                        CreateFld("IMG", 1),
+                        CreateFld("English", 2),
+                        CreateFld("Keyword", 3),
+                        CreateFld("Transcription", 4, "Lucida Sans Unicode"),
+                        CreateFld("Russian", 5, "Arial Unicode MS"),
+                        CreateFld("Sound", 6),
+                        CreateFld("Examples", 7),
                     },
                     Sortf = 0,
                     Tmpls = new List<Tmpl>
                     {
                         new Tmpl
                         {
-                            Name = "Cloze",
+                            Name = "TestTemplate",
                             Qfmt = questionTemplate,
                             Did = null,
                             Bafmt = string.Empty,
@@ -212,6 +150,20 @@ namespace ApkgCreator
                 }
             };
             return JsonConvert.SerializeObject(ankiModel, new AnkiModelJsonConverter());
+        }
+
+        private Fld CreateFld(string name, int order, string font = "Arial")
+        {
+            return new Fld
+            {
+                Name = name,
+                Media = null,
+                Sticky = false,
+                Rtl = false,
+                Ord = order,
+                Font = font,
+                Size = 20
+            };
         }
     }
 }
