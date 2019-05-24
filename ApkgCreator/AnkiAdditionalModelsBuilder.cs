@@ -132,7 +132,7 @@ namespace ApkgCreator
                     {
                         new Tmpl
                         {
-                            Name = "TestTemplate",
+                            Name = "TestTemplate30",
                             Qfmt = questionTemplate,
                             Did = null,
                             Bafmt = string.Empty,

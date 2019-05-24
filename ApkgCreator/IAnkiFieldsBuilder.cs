@@ -1,9 +1,11 @@
-﻿using Cards;
+﻿using System.Collections.Generic;
+using ApkgCreator.AdditionalModels;
+using Cards;
 
 namespace ApkgCreator
 {
     public interface IAnkiFieldsBuilder
     {
-        string BuildFields(Card card);
+        string BuildFieldsString(Card card, List<Fld> fields);
     }
 }

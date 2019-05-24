@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ApkgCreator.AdditionalModels;
 
 namespace ApkgCreator.DataModels
 {
@@ -32,18 +33,30 @@ namespace ApkgCreator.DataModels
         public int LastSyncTime { get; set; } // "last sync time" - contributed by Fletcher Moore
 
         [Column("conf")]
-        public string Conf { get; set; } // json blob of configuration
+        public string AnkiColConfigJson { get; set; } // json blob of configuration
 
         [Column("models")]
-        public string Models { get; set; } // json object with keys being ids(epoch ms), values being configuration
+        public string AnkiModelJson { get; set; } // json object with keys being ids(epoch ms), values being configuration
 
         [Column("decks")]
-        public string Decks { get; set; } // json object with keys being ids(epoch ms), values being configuration
+        public string AnkiDeckJson { get; set; } // json object with keys being ids(epoch ms), values being configuration
 
         [Column("dconf")]
-        public string DeckConfiguration { get; set; } // json object. deck configuration?
+        public string AnkiDeckConfigJson { get; set; } // json object. deck configuration?
 
         [Column("tags")]
         public string Tags { get; set; } // a cache of tags used in this collection (probably for autocomplete etc)
+
+        [NotMapped]
+        public AnkiModel AnkiModel { get; set; }
+
+        [NotMapped]
+        public AnkiDeckInfo AnkiDeckInfo { get; set; }
+
+        [NotMapped]
+        public AnkiColConfig AnkiColConfig { get; set; }
+
+        [NotMapped]
+        public AnkiDeckConfig AnkiDeckConfig { get; set; }
     }
 }

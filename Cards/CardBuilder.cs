@@ -6,11 +6,13 @@ namespace Cards
     {
         private IDefinitionRetriever _definitionRetriever;
         private IExamplesRetriever _examplesRetriever;
+        private IMp3FileRetriever _mp3FileRetriever;
 
         public CardBuilder(IDefinitionRetriever definitionRetriever, IExamplesRetriever examplesRetriver)
         {
             _definitionRetriever = definitionRetriever;
             _examplesRetriever = examplesRetriver;
+            //_mp3FileRetriever = mp3FileRetriever;
         }
 
         public Card BuildNewCard(LongmanWord word)

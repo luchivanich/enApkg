@@ -1,4 +1,5 @@
-﻿using Cards;
+﻿using ApkgCreator.DataModels;
+using Cards;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -14,8 +15,7 @@ namespace ApkgCreator
         private string apkgExtension = ".apkg";
         private string _media = "{}";
         private int _mediaCounter = 0;
-        private long _deckId = 1413830276206;
-        private long _modelId = 1397924728875;
+        private AnkiCol _ankiCol;
 
         public AnkiPackageBuilder(IAnkiPackageDbContext ankiPackageDbContext, IAnkiEntityBuilder ankiEntityBuilder)
         {
@@ -43,14 +43,14 @@ namespace ApkgCreator
 
             File.WriteAllText(Path.Combine(_directoryName, "media"), _media);
 
-            var ankiCol = _ankiEntityBuilder.BuildAnkiCol(_deckId, _modelId);
+            _ankiCol = _ankiEntityBuilder.BuildAnkiCol();
 
-            _ankiPackageDbContext.Cols.Add(ankiCol);
+            _ankiPackageDbContext.Cols.Add(_ankiCol);
         }
 
         public void AddCard(Card card)
         {
-            var ankiCard = _ankiEntityBuilder.BuildAnkiCard(card, _deckId, _modelId);
+            var ankiCard = _ankiEntityBuilder.BuildAnkiCard(card, _ankiCol);
             _ankiPackageDbContext.Cards.Add(ankiCard);
         }
 
