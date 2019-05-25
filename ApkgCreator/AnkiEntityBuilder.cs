@@ -10,12 +10,10 @@ namespace ApkgCreator
     public class AnkiEntityBuilder : IAnkiEntityBuilder
     {
         private IAnkiFieldsBuilder _ankiFieldsBuilder;
-        private IAnkiAdditionalModelsBuilder _ankiAdditionalModelsBuilder;
 
-        public AnkiEntityBuilder(IAnkiFieldsBuilder ankiFieldsBuilder, IAnkiAdditionalModelsBuilder ankiAdditionalModelsBuilder)
+        public AnkiEntityBuilder(IAnkiFieldsBuilder ankiFieldsBuilder)
         {
             _ankiFieldsBuilder = ankiFieldsBuilder;
-            _ankiAdditionalModelsBuilder = ankiAdditionalModelsBuilder;
         }
 
         public AnkiCol BuildAnkiCol()
@@ -199,7 +197,7 @@ namespace ApkgCreator
                     {
                         new Tmpl
                         {
-                            Name = "TestTemplate30",
+                            Name = "TestTemplate50", // TODO
                             Qfmt = File.ReadAllText(@"Templates/QuetionTemplate.htm"),
                             Did = null,
                             Bafmt = string.Empty,

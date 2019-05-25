@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using ApkgCreator.AdditionalModels;
+using ApkgCreator.AdditionalModels.Converters;
+using Newtonsoft.Json;
 
 namespace ApkgCreator.DataModels
 {
@@ -39,7 +41,7 @@ namespace ApkgCreator.DataModels
         public string AnkiModelJson { get; set; } // json object with keys being ids(epoch ms), values being configuration
 
         [Column("decks")]
-        public string AnkiDeckJson { get; set; } // json object with keys being ids(epoch ms), values being configuration
+        public string AnkiDeckInfoJson { get; set; } // json object with keys being ids(epoch ms), values being configuration
 
         [Column("dconf")]
         public string AnkiDeckConfigJson { get; set; } // json object. deck configuration?
@@ -47,16 +49,51 @@ namespace ApkgCreator.DataModels
         [Column("tags")]
         public string Tags { get; set; } // a cache of tags used in this collection (probably for autocomplete etc)
 
+        private AnkiModel _ankiModel;
         [NotMapped]
-        public AnkiModel AnkiModel { get; set; }
+        public AnkiModel AnkiModel {
+            get => _ankiModel;
+            set
+            {
+                _ankiModel = value;
+                AnkiModelJson = JsonConvert.SerializeObject(_ankiModel, new AnkiModelJsonConverter());
+            }
+        }
 
+        private AnkiDeckInfo _ankiDeckInfo;
         [NotMapped]
-        public AnkiDeckInfo AnkiDeckInfo { get; set; }
+        public AnkiDeckInfo AnkiDeckInfo
+        {
+            get => _ankiDeckInfo;
+            set
+            {
+                _ankiDeckInfo = value;
+                AnkiDeckInfoJson = JsonConvert.SerializeObject(_ankiDeckInfo, new AnkiDeckInfoJsonConverter());
+            }
+        }
 
+        private AnkiColConfig _ankiColConfig;
         [NotMapped]
-        public AnkiColConfig AnkiColConfig { get; set; }
+        public AnkiColConfig AnkiColConfig
+        {
+            get => _ankiColConfig;
+            set
+            {
+                _ankiColConfig = value;
+                AnkiColConfigJson = JsonConvert.SerializeObject(_ankiColConfig);
+            }
+        }
 
+        private AnkiDeckConfig _ankiDeckConfig;
         [NotMapped]
-        public AnkiDeckConfig AnkiDeckConfig { get; set; }
+        public AnkiDeckConfig AnkiDeckConfig
+        {
+            get => _ankiDeckConfig;
+            set
+            {
+                _ankiDeckConfig = value;
+                AnkiDeckConfigJson = JsonConvert.SerializeObject(_ankiDeckConfig, new AnkiDeckConfigJsonConverter());
+            }
+        }
     }
 }

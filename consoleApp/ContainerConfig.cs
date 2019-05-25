@@ -28,7 +28,6 @@ namespace consoleApp
             builder.RegisterType<AnkiPackageDbContext>().As<IAnkiPackageDbContext>();
             builder.RegisterType<AnkiFieldsBuilder>().As<IAnkiFieldsBuilder>();
             builder.RegisterType<AnkiEntityBuilder>().As<IAnkiEntityBuilder>();
-            builder.RegisterType<AnkiAdditionalModelsBuilder>().As<IAnkiAdditionalModelsBuilder>();
             builder.RegisterType<AnkiPackageBuilder>().As<IAnkiPackageBuilder>();
 
             return builder.Build();
