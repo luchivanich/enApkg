@@ -19,7 +19,6 @@ namespace consoleApp
             builder.RegisterType<OxfordDictionariesCacheDbContext>().As<IOxfordDictionariesCacheDBContext>().SingleInstance();
             builder.RegisterType<CardsProcessor>().As<ICardsProcessor>();
             builder.RegisterType<CardBuilder>().As<ICardBuilder>();
-            builder.RegisterType<CardsDbContext>().As<ICardsDbContext>();
             builder.RegisterType<OxfordDictionariesRetriever>()
                 .As<IDefinitionRetriever>()
                 .As<IExamplesRetriever>()

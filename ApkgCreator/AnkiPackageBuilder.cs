@@ -3,6 +3,7 @@ using Cards;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 
 namespace ApkgCreator
 {
@@ -39,6 +40,11 @@ namespace ApkgCreator
             _directoryName = directoryName;
 
             var directoryInfo = Directory.CreateDirectory(_directoryName);
+            foreach(var fi in directoryInfo.GetFiles())
+            {
+                fi.Delete();
+            }
+
             _ankiPackageDbContext.Init(_directoryName);
 
             File.WriteAllText(Path.Combine(_directoryName, "media"), _media);
@@ -76,6 +82,11 @@ namespace ApkgCreator
                         }
                     }
                 }
+            }
+
+            foreach(FileInfo fi in directoryInfo.GetFiles().Where(f => f.FullName != targetFileName))
+            {
+                fi.Delete();
             }
         }
 

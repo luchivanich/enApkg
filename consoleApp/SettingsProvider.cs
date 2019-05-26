@@ -23,7 +23,6 @@ namespace consoleApp
 
             _configuration = builder.Build();
 
-            Environment.SetEnvironmentVariable(CardsConstants.CardsDbConnectionStringEnvironmentVariableName, _configuration.GetConnectionString(_cardsDatabaseSettingName));
             Environment.SetEnvironmentVariable(OxfordDictionariesConstants.OxfordCacheDbConnectionStringEnvironmentVariableName, _configuration.GetConnectionString(_oxfordDictionaryCacheDatabaseSettingName));
         }
 

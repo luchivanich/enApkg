@@ -10,8 +10,6 @@ namespace OxfordDictionaries
 {
     public class OxfordDictionariesRetriever : IDefinitionRetriever, IExamplesRetriever, IAudioFileUrlRetriever
     {
-        private const string DEFINITIONS_ENDPOINT = @"/entries/{source_lang}/{word_id}/definitions";
-
         private OxfordDictionarySettings _oxfordDictionarySettings;
         private IOxfordDictionariesCacheDBContext _oxfordDictionariesCacheDBContext;
 
@@ -23,34 +21,36 @@ namespace OxfordDictionaries
 
         public OxfordDictionaryEntity RetrieveOxfordDictionaryEntity(string word)
         {
-            var result = GetWordDefinitionFromDB(word);
+            var cachedItem = _oxfordDictionariesCacheDBContext.Words.SingleOrDefault(w => w.Word == word);
 
-            if (result == null)
+            if (cachedItem != null)
             {
-                var client = new HttpClient();
-                var query = GetWholeWordQuery(word);
-
-                client.DefaultRequestHeaders.Add("APP_ID", _oxfordDictionarySettings.AppId);
-                client.DefaultRequestHeaders.Add("APP_KEY", _oxfordDictionarySettings.ApiKey);
-                var response = client.GetAsync(query);
-                var a = response.Result;
-                if (a.StatusCode != System.Net.HttpStatusCode.OK)
-                {
-                    return null;
-                }
-                var resultString = a.Content.ReadAsStringAsync().Result;
-                result = JsonConvert.DeserializeObject<OxfordDictionaryEntity>(resultString);
-
-                if (result != null)
-                {
-                    SaveNewWord(word, resultString);
-                }
-
-                Thread.Sleep(1000);
-
+                return JsonConvert.DeserializeObject<OxfordDictionaryEntity>(cachedItem?.OxfordDictionaryEntityJson);
             }
 
-            return result;
+            var client = new HttpClient();
+            var query = GetWholeWordQuery(word);
+
+            client.DefaultRequestHeaders.Add("APP_ID", _oxfordDictionarySettings.AppId);
+            client.DefaultRequestHeaders.Add("APP_KEY", _oxfordDictionarySettings.ApiKey);
+            var response = client.GetAsync(query);
+
+            Thread.Sleep(1000); // TODO
+
+            var a = response.Result;
+            switch (a.StatusCode)
+            {
+                case System.Net.HttpStatusCode.OK:
+                    var resultString = a.Content.ReadAsStringAsync().Result;
+                    var result = JsonConvert.DeserializeObject<OxfordDictionaryEntity>(resultString);
+                    SaveNewWord(word, resultString);
+                    return result;
+
+                case System.Net.HttpStatusCode.NotFound:
+                    SaveNewWord(word, string.Empty);
+                    break;
+            }
+            return null;
         }
 
         private string GetWholeWordQuery(string word)

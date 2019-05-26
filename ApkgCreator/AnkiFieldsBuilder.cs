@@ -11,6 +11,7 @@ namespace ApkgCreator
     {
         private const string FIELD_DELIMETER = "\u001f";
         private const string EXAMPLE_DELIMETER = "</br>";
+
         private Dictionary<string, Func<Card, string>> _fieldBuilders;
 
         public AnkiFieldsBuilder()
@@ -29,12 +30,12 @@ namespace ApkgCreator
 
         private string EnglishFieldBuilder(Card card)
         {
-            return " {{c1::" + card.Word + "}} - " + card.Definition;
+            return $"{{{{c1::{card.Word}}}}} - {card.Definition}";
         }
 
         private string ExamplesFieldBuilder(Card card)
         {
-            return card.Examples != null ? string.Join(EXAMPLE_DELIMETER, card.Examples?.Select(e => Regex.Replace(e?.Value, card.Word, "{{c1::" + card.Word + "}}", RegexOptions.IgnoreCase)).ToList()) : string.Empty;
+            return card.Examples != null ? string.Join(EXAMPLE_DELIMETER, card.Examples.Select(e => Regex.Replace(e?.Value, card.Word, $"{{{{c1::{card.Word}}}}}", RegexOptions.IgnoreCase)).ToList()) : string.Empty;
         }
     }
 }
