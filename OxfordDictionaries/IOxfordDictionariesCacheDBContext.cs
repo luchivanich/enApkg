@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using OxfordDictionaries.DataModels;
 
 namespace OxfordDictionaries
 {
     public interface IOxfordDictionariesCacheDBContext
     {
-        DbSet<CachedItem> Words { get; set; }
+        DbSet<LexicalEntry> LexicalEntries { get; set; }
+        DbSet<AudioFile> AudioFiles { get; set; }
 
         int SaveChanges();
 

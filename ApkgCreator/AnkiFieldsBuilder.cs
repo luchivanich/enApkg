@@ -35,7 +35,7 @@ namespace ApkgCreator
 
         private string ExamplesFieldBuilder(Card card)
         {
-            return card.Examples != null ? string.Join(EXAMPLE_DELIMETER, card.Examples.Select(e => Regex.Replace(e?.Value, card.Word, $"{{{{c1::{card.Word}}}}}", RegexOptions.IgnoreCase)).ToList()) : string.Empty;
+            return card.Examples != null ? string.Join(EXAMPLE_DELIMETER, card.Examples.Select(e => Regex.Replace(e, card.Word, $"{{{{c1::{card.Word}}}}}", RegexOptions.IgnoreCase)).ToList()) : string.Empty;
         }
     }
 }

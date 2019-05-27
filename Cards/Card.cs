@@ -1,23 +1,26 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Cards
 {
-    public class Card : LongmanWord
+    public class Card : IWord
     {
-        [Key]
         public int Id { get; set; }
 
         public string Definition { get; set; }
 
-        [ForeignKey("Examples")]
-        public List<Example> Examples { get; set; }
+        public List<string> Examples { get; set; }
 
-        public string AudioFileUri { get; set; }
+        public byte[] AudioFileData { get; set; }
 
-        //public byte[] Mp3File { get; set; }
+        public string AudioFileName { get; set; }
 
         public string Translation { get; set; }
+
+        public string Word { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public LexicalCategory? LexicalCategory { get; set; }
     }
 }

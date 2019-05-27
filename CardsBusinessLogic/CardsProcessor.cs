@@ -27,10 +27,10 @@ namespace CardsBusinessLogic
 
         private void SaveWordsIntoCardsDb(string pathToWordsFile)
         {
-            var words = JsonConvert.DeserializeObject<List<LongmanWord>>(File.ReadAllText(pathToWordsFile));
-            foreach (var word in words)
+            var cards = JsonConvert.DeserializeObject<List<Card>>(File.ReadAllText(pathToWordsFile));
+            foreach (var card in cards)
             {
-                var card = _cardBuilder.BuildNewCard(word);
+                _cardBuilder.BuildCard(card);
                 if (!string.IsNullOrWhiteSpace(card.Definition))
                 {
                     _cardsToAdd.Add(card);

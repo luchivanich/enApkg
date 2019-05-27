@@ -1,35 +1,51 @@
 ﻿using Cards;
 using Newtonsoft.Json;
-using System;
+using OxfordDictionaries.DataModels;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
 
 namespace OxfordDictionaries
 {
-    public class OxfordDictionariesRetriever : IDefinitionRetriever, IExamplesRetriever, IAudioFileUrlRetriever
+    public class OxfordDictionariesRetriever : IDictionaryDataRetriever
     {
         private OxfordDictionarySettings _oxfordDictionarySettings;
         private IOxfordDictionariesCacheDBContext _oxfordDictionariesCacheDBContext;
+        private IFileDownloader _fileDownloader;
 
-        public OxfordDictionariesRetriever(IOxfordDictionarySettingsProvider oxfordDictionarySettingsProvider, IOxfordDictionariesCacheDBContext oxfordDictionariesCacheDBContext)
+        public OxfordDictionariesRetriever(IOxfordDictionarySettingsProvider oxfordDictionarySettingsProvider, IOxfordDictionariesCacheDBContext oxfordDictionariesCacheDBContext, IFileDownloader fileDownloader)
         {
             _oxfordDictionarySettings = oxfordDictionarySettingsProvider.GetOxfordDictionarySettings();
             _oxfordDictionariesCacheDBContext = oxfordDictionariesCacheDBContext;
+            _fileDownloader = fileDownloader;
         }
 
-        public OxfordDictionaryEntity RetrieveOxfordDictionaryEntity(string word)
+        private OxfordDictionaryLexicalEntryV2 RetrieveOdLexicalEntries(IWord word)
         {
-            var cachedItem = _oxfordDictionariesCacheDBContext.Words.SingleOrDefault(w => w.Word == word);
+            var lexicalEntry = _oxfordDictionariesCacheDBContext
+                .LexicalEntries
+                .FirstOrDefault(l => l.Word.ToLower() == word.Word.ToLower() && (l.LexicalCategory == word.LexicalCategory.ToString() || word.LexicalCategory == null));
 
-            if (cachedItem != null)
+            if (lexicalEntry == null)
             {
-                return JsonConvert.DeserializeObject<OxfordDictionaryEntity>(cachedItem?.OxfordDictionaryEntityJson);
+                lexicalEntry = RetrieveLexicalEntriesFromOdApi(word.Word)
+                    .FirstOrDefault(l => l.Word.ToLower() == word.Word.ToLower() && l.LexicalCategory == word.LexicalCategory.ToString());
             }
 
+            if (lexicalEntry?.OxfordDictionaryLexicalEntryV2Json == null)
+            {
+                return null;
+            }
+
+            return JsonConvert.DeserializeObject<OxfordDictionaryLexicalEntryV2>(lexicalEntry.OxfordDictionaryLexicalEntryV2Json);
+        }
+
+        private List<LexicalEntry> RetrieveLexicalEntriesFromOdApi(string word) // TODO Rework the whole method (approach)
+        {
             var client = new HttpClient();
-            var query = GetWholeWordQuery(word);
+            var query = BuildApiQuery(word);
 
             client.DefaultRequestHeaders.Add("APP_ID", _oxfordDictionarySettings.AppId);
             client.DefaultRequestHeaders.Add("APP_KEY", _oxfordDictionarySettings.ApiKey);
@@ -42,81 +58,94 @@ namespace OxfordDictionaries
             {
                 case System.Net.HttpStatusCode.OK:
                     var resultString = a.Content.ReadAsStringAsync().Result;
-                    var result = JsonConvert.DeserializeObject<OxfordDictionaryEntity>(resultString);
-                    SaveNewWord(word, resultString);
+                    var odData = JsonConvert.DeserializeObject<OxfordDictionaryEntityV2>(resultString);
+                    var result = new List<LexicalEntry>();
+
+                    var odMainResult = odData?.Results?.FirstOrDefault();
+
+                    foreach(var le in odMainResult.LexicalEntries)
+                    {
+                        var lexicalEntry = new LexicalEntry
+                        {
+                            Word = odMainResult.Word,
+                            LexicalCategory = le.LexicalCategory.Text,
+                            OxfordDictionaryLexicalEntryV2Json = JsonConvert.SerializeObject(le)
+                        };
+
+                        var audioFileUri = le.Pronunciations?.FirstOrDefault().AudioFile;
+                        if (audioFileUri != null)
+                        {
+                            var audioFile = _oxfordDictionariesCacheDBContext.AudioFiles.FirstOrDefault(af => af.Url == audioFileUri.AbsoluteUri);
+                            if (audioFile == null)
+                            {
+                                audioFile = new AudioFile {
+                                    Url = audioFileUri.AbsoluteUri,
+                                    FileName = Path.GetFileName(audioFileUri.LocalPath),
+                                    Data = _fileDownloader.GetFileFromUrl(audioFileUri.AbsoluteUri),
+                                    LexicalEntries = new List<LexicalEntry>() };
+                                _oxfordDictionariesCacheDBContext.AudioFiles.Add(audioFile);
+                            }
+                            audioFile.LexicalEntries.Add(lexicalEntry);
+                        }
+
+                        _oxfordDictionariesCacheDBContext.LexicalEntries.Add(lexicalEntry);
+                        _oxfordDictionariesCacheDBContext.SaveChanges();
+                        result.Add(lexicalEntry);
+                    }
                     return result;
 
                 case System.Net.HttpStatusCode.NotFound:
-                    SaveNewWord(word, string.Empty);
-                    break;
+                    _oxfordDictionariesCacheDBContext.LexicalEntries.Add(new LexicalEntry{ Word = word });
+                    _oxfordDictionariesCacheDBContext.SaveChanges();
+                    return new List<LexicalEntry>();
             }
-            return null;
+            return new List<LexicalEntry>();
         }
 
-        private string GetWholeWordQuery(string word)
+        private string BuildApiQuery(string word)
         {
             return $"{_oxfordDictionarySettings.BaseUrl}/entries/en/{word}";
         }
 
-        private OxfordDictionaryEntity GetWordDefinitionFromDB(string word)
-        {
-            var cachedItem = _oxfordDictionariesCacheDBContext.Words.SingleOrDefault(w => w.Word == word);
-            if (cachedItem != null)
-            {
-                return JsonConvert.DeserializeObject<OxfordDictionaryEntity>(cachedItem?.OxfordDictionaryEntityJson);
-            }
-            return null;
-        }
-
-        private void SaveNewWord(string word, string entity)
-        {
-            var itemToSave = new CachedItem { Word = word, OxfordDictionaryEntityJson = entity };
-
-            _oxfordDictionariesCacheDBContext.Words.Add(itemToSave);
-            _oxfordDictionariesCacheDBContext.SaveChanges();
-        }
-
-        public void ResetDataBase()
-        {
-            _oxfordDictionariesCacheDBContext.Database.EnsureDeleted();
-            _oxfordDictionariesCacheDBContext.Database.EnsureCreated();
-
-            _oxfordDictionariesCacheDBContext.SaveChanges();
-        }
-
-        public string GetDefinition(LongmanWord word)
+        public string GetDefinition(IWord word)
         {
             return GetWordSense(word)?.Definitions?.FirstOrDefault();
         }
 
-        public List<string> GetExamples(LongmanWord word)
+        public List<string> GetExamples(IWord word)
         {
             return GetWordSense(word)?.Examples?.Select(e => e.Text).ToList();
         }
 
-        public Uri GetAudioFileUri(LongmanWord word)
-        {
-            var entity = RetrieveOxfordDictionaryEntity(word.Word);
-            return entity?
-                .Results?
-                .FirstOrDefault()?
-                .LexicalEntries?
-                .FirstOrDefault(i => i.LexicalCategory == word.LexicalCategory.ToString() || word.LexicalCategory == null)?
-                .Pronunciations?.FirstOrDefault()?.AudioFile;
-        }
+        //public Uri GetAudioFileUri(IWord word)
+        //{
+        //    var entity = RetrieveOxfordDictionaryEntity(word.Word);
+        //    return entity?
+        //        .Results?
+        //        .FirstOrDefault()?
+        //        .LexicalEntries?
+        //        .FirstOrDefault(i => i.LexicalCategory == word.LexicalCategory.ToString() || word.LexicalCategory == null)?
+        //        .Pronunciations?.FirstOrDefault()?.AudioFile;
+        //}
 
-        private Sense GetWordSense(LongmanWord word)
+        private OxfordDictionarySenseV2 GetWordSense(IWord word)
         {
-            var entity = RetrieveOxfordDictionaryEntity(word.Word);
-            return entity?
-                .Results?
-                .FirstOrDefault()?
-                .LexicalEntries?
-                .FirstOrDefault(i => i.LexicalCategory == word.LexicalCategory.ToString() || word.LexicalCategory == null)?
+            var lexicalEntry = RetrieveOdLexicalEntries(word);
+            return lexicalEntry?
                 .Entries?
                 .FirstOrDefault()?
                 .Senses?
                 .FirstOrDefault();
         }
+
+        public (string fileName, byte[] fileData) GetAudioFile(IWord word)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        //private List<AudioFile> GetAudioFiles(OxfordDictionaryEntity odEntity)
+        //{
+        //    var urls = odEntity?.Results?.Select(r => r.LexicalEntries?.Sel)
+        //}
     }
 }

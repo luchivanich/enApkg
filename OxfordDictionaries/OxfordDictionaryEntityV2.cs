@@ -2,9 +2,9 @@
 //
 // To parse this JSON data, add NuGet 'Newtonsoft.Json' then do:
 //
-//    using QuickType;
+//    using OxfordDictionaries;
 //
-//    var oxfordDictionaryEntity = OxfordDictionaryEntity.FromJson(jsonString);
+//    var oxfordDictionaryEntityV2 = OxfordDictionaryEntityV2.FromJson(jsonString);
 
 namespace OxfordDictionaries
 {
@@ -15,22 +15,34 @@ namespace OxfordDictionaries
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
 
-    public partial class OxfordDictionaryEntity
+    public partial class OxfordDictionaryEntityV2
     {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
         [JsonProperty("metadata")]
-        public Metadata Metadata { get; set; }
+        public OxfordDictionaryMetadataV2 Metadata { get; set; }
 
         [JsonProperty("results")]
-        public List<Result> Results { get; set; }
+        public List<OxfordDictionaryResultV2> Results { get; set; }
+
+        [JsonProperty("word")]
+        public string Word { get; set; }
     }
 
-    public partial class Metadata
+    public partial class OxfordDictionaryMetadataV2
     {
+        [JsonProperty("operation")]
+        public string Operation { get; set; }
+
         [JsonProperty("provider")]
         public string Provider { get; set; }
+
+        [JsonProperty("schema")]
+        public string Schema { get; set; }
     }
 
-    public partial class Result
+    public partial class OxfordDictionaryResultV2
     {
         [JsonProperty("id")]
         public string Id { get; set; }
@@ -39,7 +51,7 @@ namespace OxfordDictionaries
         public string Language { get; set; }
 
         [JsonProperty("lexicalEntries")]
-        public List<LexicalEntry> LexicalEntries { get; set; }
+        public List<OxfordDictionaryLexicalEntryV2> LexicalEntries { get; set; }
 
         [JsonProperty("type")]
         public string Type { get; set; }
@@ -48,28 +60,28 @@ namespace OxfordDictionaries
         public string Word { get; set; }
     }
 
-    public partial class LexicalEntry
+    public partial class OxfordDictionaryLexicalEntryV2
     {
-        [JsonProperty("derivatives")]
-        public List<Derivative> Derivatives { get; set; }
+        [JsonProperty("derivatives", NullValueHandling = NullValueHandling.Ignore)]
+        public List<OxfordDictionaryLexicalCategoryV2> Derivatives { get; set; }
 
         [JsonProperty("entries")]
-        public List<Entry> Entries { get; set; }
+        public List<OxfordDictionaryEntryV2> Entries { get; set; }
 
         [JsonProperty("language")]
         public string Language { get; set; }
 
         [JsonProperty("lexicalCategory")]
-        public string LexicalCategory { get; set; }
+        public OxfordDictionaryLexicalCategoryV2 LexicalCategory { get; set; }
 
         [JsonProperty("pronunciations")]
-        public List<Pronunciation> Pronunciations { get; set; }
+        public List<OxfordDictionaryPronunciationV2> Pronunciations { get; set; }
 
         [JsonProperty("text")]
         public string Text { get; set; }
     }
 
-    public partial class Derivative
+    public partial class OxfordDictionaryLexicalCategoryV2
     {
         [JsonProperty("id")]
         public string Id { get; set; }
@@ -78,24 +90,27 @@ namespace OxfordDictionaries
         public string Text { get; set; }
     }
 
-    public partial class Entry
+    public partial class OxfordDictionaryEntryV2
     {
         [JsonProperty("etymologies", NullValueHandling = NullValueHandling.Ignore)]
         public List<string> Etymologies { get; set; }
 
-        [JsonProperty("grammaticalFeatures")]
-        public List<GrammaticalFeature> GrammaticalFeatures { get; set; }
-
         [JsonProperty("homographNumber")]
-        [JsonConverter(typeof(ParseStringConverter))]
+        [JsonConverter(typeof(OxfordDictionaryParseStringConverterV2))]
         public long HomographNumber { get; set; }
 
         [JsonProperty("senses")]
-        public List<Sense> Senses { get; set; }
+        public List<OxfordDictionarySenseV2> Senses { get; set; }
+
+        [JsonProperty("grammaticalFeatures", NullValueHandling = NullValueHandling.Ignore)]
+        public List<OxfordDictionaryGrammaticalFeatureV2> GrammaticalFeatures { get; set; }
     }
 
-    public partial class GrammaticalFeature
+    public partial class OxfordDictionaryGrammaticalFeatureV2
     {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
         [JsonProperty("text")]
         public string Text { get; set; }
 
@@ -103,44 +118,50 @@ namespace OxfordDictionaries
         public string Type { get; set; }
     }
 
-    public partial class Sense
+    public partial class OxfordDictionarySenseV2
     {
         [JsonProperty("definitions", NullValueHandling = NullValueHandling.Ignore)]
         public List<string> Definitions { get; set; }
 
         [JsonProperty("examples", NullValueHandling = NullValueHandling.Ignore)]
-        public List<Example> Examples { get; set; }
+        public List<OxfordDictionaryExampleV2> Examples { get; set; }
 
         [JsonProperty("id")]
         public string Id { get; set; }
 
-        [JsonProperty("short_definitions", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("shortDefinitions", NullValueHandling = NullValueHandling.Ignore)]
         public List<string> ShortDefinitions { get; set; }
 
         [JsonProperty("subsenses", NullValueHandling = NullValueHandling.Ignore)]
-        public List<Subsense> Subsenses { get; set; }
+        public List<OxfordDictionarySubsenseV2> Subsenses { get; set; }
 
         [JsonProperty("thesaurusLinks", NullValueHandling = NullValueHandling.Ignore)]
-        public List<ThesaurusLink> ThesaurusLinks { get; set; }
+        public List<OxfordDictionaryThesaurusLinkV2> ThesaurusLinks { get; set; }
 
         [JsonProperty("crossReferenceMarkers", NullValueHandling = NullValueHandling.Ignore)]
         public List<string> CrossReferenceMarkers { get; set; }
 
         [JsonProperty("crossReferences", NullValueHandling = NullValueHandling.Ignore)]
-        public List<CrossReference> CrossReferences { get; set; }
+        public List<OxfordDictionaryGrammaticalFeatureV2> CrossReferences { get; set; }
 
         [JsonProperty("variantForms", NullValueHandling = NullValueHandling.Ignore)]
-        public List<Example> VariantForms { get; set; }
+        public List<OxfordDictionaryVariantFormV2> VariantForms { get; set; }
 
         [JsonProperty("domains", NullValueHandling = NullValueHandling.Ignore)]
-        public List<string> Domains { get; set; }
+        public List<OxfordDictionaryLexicalCategoryV2> Domains { get; set; }
     }
 
-    public partial class CrossReference
+    public partial class OxfordDictionaryExampleV2
     {
-        [JsonProperty("id")]
-        public string Id { get; set; }
+        [JsonProperty("text")]
+        public string Text { get; set; }
 
+        [JsonProperty("notes", NullValueHandling = NullValueHandling.Ignore)]
+        public List<OxfordDictionaryNoteV2> Notes { get; set; }
+    }
+
+    public partial class OxfordDictionaryNoteV2
+    {
         [JsonProperty("text")]
         public string Text { get; set; }
 
@@ -148,37 +169,37 @@ namespace OxfordDictionaries
         public string Type { get; set; }
     }
 
-    public partial class Example
-    {
-        [JsonProperty("text")]
-        public string Text { get; set; }
-    }
-
-    public partial class Subsense
+    public partial class OxfordDictionarySubsenseV2
     {
         [JsonProperty("definitions")]
         public List<string> Definitions { get; set; }
 
         [JsonProperty("examples", NullValueHandling = NullValueHandling.Ignore)]
-        public List<Example> Examples { get; set; }
+        public List<OxfordDictionaryVariantFormV2> Examples { get; set; }
 
         [JsonProperty("id")]
         public string Id { get; set; }
 
-        [JsonProperty("short_definitions")]
+        [JsonProperty("shortDefinitions")]
         public List<string> ShortDefinitions { get; set; }
 
         [JsonProperty("thesaurusLinks", NullValueHandling = NullValueHandling.Ignore)]
-        public List<ThesaurusLink> ThesaurusLinks { get; set; }
+        public List<OxfordDictionaryThesaurusLinkV2> ThesaurusLinks { get; set; }
 
         [JsonProperty("domains", NullValueHandling = NullValueHandling.Ignore)]
-        public List<string> Domains { get; set; }
+        public List<OxfordDictionaryLexicalCategoryV2> Domains { get; set; }
 
         [JsonProperty("notes", NullValueHandling = NullValueHandling.Ignore)]
-        public List<GrammaticalFeature> Notes { get; set; }
+        public List<OxfordDictionaryNoteV2> Notes { get; set; }
     }
 
-    public partial class ThesaurusLink
+    public partial class OxfordDictionaryVariantFormV2
+    {
+        [JsonProperty("text")]
+        public string Text { get; set; }
+    }
+
+    public partial class OxfordDictionaryThesaurusLinkV2
     {
         [JsonProperty("entry_id")]
         public string EntryId { get; set; }
@@ -187,7 +208,7 @@ namespace OxfordDictionaries
         public string SenseId { get; set; }
     }
 
-    public partial class Pronunciation
+    public partial class OxfordDictionaryPronunciationV2
     {
         [JsonProperty("audioFile")]
         public Uri AudioFile { get; set; }
@@ -202,17 +223,17 @@ namespace OxfordDictionaries
         public string PhoneticSpelling { get; set; }
     }
 
-    public partial class OxfordDictionaryEntity
+    public partial class OxfordDictionaryEntityV2
     {
-        public static OxfordDictionaryEntity FromJson(string json) => JsonConvert.DeserializeObject<OxfordDictionaryEntity>(json, Converter.Settings);
+        public static OxfordDictionaryEntityV2 FromJson(string json) => JsonConvert.DeserializeObject<OxfordDictionaryEntityV2>(json, OxfordDictionaries.OxfordDictionaryConverterV2.Settings);
     }
 
-    public static class Serialize
+    public static class OxfordDictionarySerializeV2
     {
-        public static string ToJson(this OxfordDictionaryEntity self) => JsonConvert.SerializeObject(self, Converter.Settings);
+        public static string ToJson(this OxfordDictionaryEntityV2 self) => JsonConvert.SerializeObject(self, OxfordDictionaries.OxfordDictionaryConverterV2.Settings);
     }
 
-    internal static class Converter
+    internal static class OxfordDictionaryConverterV2
     {
         public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
         {
@@ -225,7 +246,7 @@ namespace OxfordDictionaries
         };
     }
 
-    internal class ParseStringConverter : JsonConverter
+    internal class OxfordDictionaryParseStringConverterV2 : JsonConverter
     {
         public override bool CanConvert(Type t) => t == typeof(long) || t == typeof(long?);
 
@@ -253,6 +274,6 @@ namespace OxfordDictionaries
             return;
         }
 
-        public static readonly ParseStringConverter Singleton = new ParseStringConverter();
+        public static readonly OxfordDictionaryParseStringConverterV2 Singleton = new OxfordDictionaryParseStringConverterV2();
     }
 }

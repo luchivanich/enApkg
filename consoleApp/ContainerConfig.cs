@@ -17,12 +17,11 @@ namespace consoleApp
                 .As<IOxfordDictionarySettingsProvider>()
                 .SingleInstance();
             builder.RegisterType<OxfordDictionariesCacheDbContext>().As<IOxfordDictionariesCacheDBContext>().SingleInstance();
+            builder.RegisterType<FileDownloader>().As<IFileDownloader>();
             builder.RegisterType<CardsProcessor>().As<ICardsProcessor>();
             builder.RegisterType<CardBuilder>().As<ICardBuilder>();
             builder.RegisterType<OxfordDictionariesRetriever>()
-                .As<IDefinitionRetriever>()
-                .As<IExamplesRetriever>()
-                .As<IAudioFileUrlRetriever>()
+                .As<IDictionaryDataRetriever>()
                 .SingleInstance();
             builder.RegisterType<AnkiPackageDbContext>().As<IAnkiPackageDbContext>();
             builder.RegisterType<AnkiFieldsBuilder>().As<IAnkiFieldsBuilder>();
