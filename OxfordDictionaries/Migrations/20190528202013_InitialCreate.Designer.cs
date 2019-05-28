@@ -9,7 +9,7 @@ using OxfordDictionaries;
 namespace OxfordDictionaries.Migrations
 {
     [DbContext(typeof(OxfordDictionariesCacheDbContext))]
-    [Migration("20190527202006_InitialCreate")]
+    [Migration("20190528202013_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,7 +56,7 @@ namespace OxfordDictionaries.Migrations
 
             modelBuilder.Entity("OxfordDictionaries.DataModels.LexicalEntry", b =>
                 {
-                    b.HasOne("OxfordDictionaries.DataModels.AudioFile")
+                    b.HasOne("OxfordDictionaries.DataModels.AudioFile", "AudioFile")
                         .WithMany("LexicalEntries")
                         .HasForeignKey("AudioFileId");
                 });

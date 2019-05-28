@@ -13,10 +13,7 @@ namespace Cards
 
         public void BuildCard(Card card)
         {
-            //card.LexicalCategory = word.LexicalCategory;
-            card.Definition = _dictionaryDataRetriever.GetDefinition(card);
-            card.Examples = _dictionaryDataRetriever.GetExamples(card);
-            (card.AudioFileName, card.AudioFileData) = _dictionaryDataRetriever.GetAudioFile(card);
+            (card.Definition, card.Examples, card.AudioFileName, card.AudioFileData) = _dictionaryDataRetriever.GetDictionaryData(card);
         }
     }
 }

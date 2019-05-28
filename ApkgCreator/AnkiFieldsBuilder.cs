@@ -20,6 +20,7 @@ namespace ApkgCreator
             _fieldBuilders.Add("№", c => c.Id.ToString());
             _fieldBuilders.Add("English", EnglishFieldBuilder);
             _fieldBuilders.Add("Keyword", c => c.Word);
+            _fieldBuilders.Add("Sound", c => c.AudioFileName);
             _fieldBuilders.Add("Examples", ExamplesFieldBuilder);
         }
 

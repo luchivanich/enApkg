@@ -12,7 +12,9 @@ namespace ApkgCreator
         private IAnkiPackageDbContext _ankiPackageDbContext;
         private IAnkiEntityBuilder _ankiEntityBuilder;
 
-        private string _directoryName;
+        private DirectoryInfo _directoryInfo;
+        private string _targetPath;
+        private string _targetName;
         private string apkgExtension = ".apkg";
         private string _media = "{}";
         private int _mediaCounter = 0;
@@ -26,28 +28,31 @@ namespace ApkgCreator
 
         public void BuildApkgPackage(string targetPath, string targetName, List<Card> cards)
         {
-            Init(targetPath);
+            _targetPath = targetPath;
+            _targetName = targetName;
+            _directoryInfo = new DirectoryInfo(_targetPath);
+
+            Init();
             foreach(var card in cards)
             {
                 AddCard(card);
             }
             _ankiPackageDbContext.SaveChanges();
-            CreateApkgFile(targetPath, targetName);
+            CreateApkgFile();
+            CleanupTargetDirectory();
         }
 
-        public void Init(string directoryName)
+        public void Init()
         {
-            _directoryName = directoryName;
-
-            var directoryInfo = Directory.CreateDirectory(_directoryName);
+            var directoryInfo = Directory.CreateDirectory(_targetPath);
             foreach(var fi in directoryInfo.GetFiles())
             {
                 fi.Delete();
             }
 
-            _ankiPackageDbContext.Init(_directoryName);
+            _ankiPackageDbContext.Init(_targetPath);
 
-            File.WriteAllText(Path.Combine(_directoryName, "media"), _media);
+            File.WriteAllText(Path.Combine(_targetPath, "media"), _media);
 
             _ankiCol = _ankiEntityBuilder.BuildAnkiCol();
 
@@ -57,15 +62,29 @@ namespace ApkgCreator
         public void AddCard(Card card)
         {
             var ankiCard = _ankiEntityBuilder.BuildAnkiCard(card, _ankiCol);
+            if (!string.IsNullOrWhiteSpace(card.AudioFileName))
+            {
+                SaveAudioFile(card.AudioFileName, card.AudioFileData);
+            }
             _ankiPackageDbContext.Cards.Add(ankiCard);
         }
 
-        public void CreateApkgFile(string directoryName, string targetName)
+        private void SaveAudioFile(string fileName, byte[] fileData)
         {
-            var directoryInfo = new DirectoryInfo(directoryName);
-            var files = directoryInfo.GetFiles();
+            var fileFullPath = Path.Combine(_targetPath, fileName);
+            if (File.Exists(fileFullPath))
+            {
+                return;
+            }
 
-            var targetFileName = Path.Combine(directoryName, targetName + apkgExtension);
+            File.WriteAllBytes(fileFullPath, fileData);
+        }
+
+        public void CreateApkgFile()
+        {
+            var files = _directoryInfo.GetFiles();
+
+            var targetFileName = Path.Combine(_targetPath, _targetName + apkgExtension);
             File.Delete(targetFileName);
 
             using (var fileStream = new FileStream(targetFileName, FileMode.CreateNew))
@@ -83,11 +102,6 @@ namespace ApkgCreator
                     }
                 }
             }
-
-            foreach(FileInfo fi in directoryInfo.GetFiles().Where(f => f.FullName != targetFileName))
-            {
-                fi.Delete();
-            }
         }
 
         private void AddMedia(string mediaFile)
@@ -100,7 +114,15 @@ namespace ApkgCreator
 
             mediaFile.Insert(mediaFile.Length - 2, $"\"{_mediaCounter.ToString()}\" : \"{mediaFile.ToString()}\"");
 
-            File.WriteAllText(Path.Combine(_directoryName, "media"), _media);
+            File.WriteAllText(Path.Combine(_targetPath, "media"), _media);
+        }
+
+        private void CleanupTargetDirectory()
+        {
+            foreach (FileInfo fi in _directoryInfo.GetFiles().Where(f => f.Extension != apkgExtension))
+            {
+                fi.Delete();
+            }
         }
     }
 }

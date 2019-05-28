@@ -54,7 +54,7 @@ namespace OxfordDictionaries.Migrations
 
             modelBuilder.Entity("OxfordDictionaries.DataModels.LexicalEntry", b =>
                 {
-                    b.HasOne("OxfordDictionaries.DataModels.AudioFile")
+                    b.HasOne("OxfordDictionaries.DataModels.AudioFile", "AudioFile")
                         .WithMany("LexicalEntries")
                         .HasForeignKey("AudioFileId");
                 });
