@@ -4,6 +4,6 @@ namespace Cards
 {
     public interface IDictionaryDataRetriever
     {
-        (string definition, List<string> examples, string fileName, byte[] fileData) GetDictionaryData(IWord word);
+        (string word, string definition, List<string> examples, string fileName, byte[] fileData) GetDictionaryData(IWord word);
     }
 }

@@ -17,7 +17,6 @@ namespace ApkgCreator
         private string _targetName;
         private string apkgExtension = ".apkg";
         private string _media = "";
-        private int _mediaCounter = 0;
         private AnkiCol _ankiCol;
 
         public AnkiPackageBuilder(IAnkiPackageDbContext ankiPackageDbContext, IAnkiEntityBuilder ankiEntityBuilder)

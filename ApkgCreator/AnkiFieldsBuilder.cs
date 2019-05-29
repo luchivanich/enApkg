@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using ApkgCreator.AdditionalModels;
@@ -36,7 +37,21 @@ namespace ApkgCreator
 
         private string ExamplesFieldBuilder(Card card)
         {
-            return card.Examples != null ? string.Join(EXAMPLE_DELIMETER, card.Examples.Select(e => Regex.Replace(e, card.Word, $"{{{{c1::{card.Word}}}}}", RegexOptions.IgnoreCase)).ToList()) : string.Empty;
+            if (card.Examples == null || card.Examples.Count == 0)
+            {
+                return string.Empty;
+            }
+
+            var result = string.Empty;
+            var examplesTemplate = File.ReadAllText(@"Templates/Examples.htm");
+            var exampleTemplate = File.ReadAllText(@"Templates/Example.htm");
+            foreach (var example in card.Examples)
+            {
+                result += exampleTemplate.Replace("@Example", Regex.Replace(example, card.Word, $"{{{{c1::{card.Word}}}}}", RegexOptions.IgnoreCase));
+
+            }
+            result = examplesTemplate.Replace("@Examples", result);
+            return result;
         }
     }
 }

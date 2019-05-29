@@ -24,6 +24,12 @@
     <None Update="Templates\AnswerTemplate.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Templates\Example.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\Examples.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\QuetionTemplate.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

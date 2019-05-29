@@ -197,7 +197,7 @@ namespace ApkgCreator
                     {
                         new Tmpl
                         {
-                            Name = "TestTemplate50", // TODO
+                            Name = "TestTemplate70", // TODO
                             Qfmt = File.ReadAllText(@"Templates/QuetionTemplate.htm"),
                             Did = null,
                             Bafmt = string.Empty,

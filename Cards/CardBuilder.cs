@@ -13,7 +13,7 @@ namespace Cards
 
         public void BuildCard(Card card)
         {
-            (card.Definition, card.Examples, card.AudioFileName, card.AudioFileData) = _dictionaryDataRetriever.GetDictionaryData(card);
+            (card.Word, card.Definition, card.Examples, card.AudioFileName, card.AudioFileData) = _dictionaryDataRetriever.GetDictionaryData(card);
         }
     }
 }

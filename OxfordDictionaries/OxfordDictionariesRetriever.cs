@@ -23,7 +23,7 @@ namespace OxfordDictionaries
             _fileDownloader = fileDownloader;
         }
         
-        public (string definition, List<string> examples, string fileName, byte[] fileData) GetDictionaryData(IWord word)
+        public (string word, string definition, List<string> examples, string fileName, byte[] fileData) GetDictionaryData(IWord word)
         {
             var lexicalEntry = RetrieveOdLexicalEntry(word);
             var sense = lexicalEntry
@@ -33,6 +33,7 @@ namespace OxfordDictionaries
                 .Senses?
                 .FirstOrDefault();
             return (
+                lexicalEntry?.Word,
                 sense?.Definitions?.FirstOrDefault(),
                 sense?.Examples?.Select(e => e.Text).ToList(),
                 lexicalEntry?.AudioFile?.FileName,

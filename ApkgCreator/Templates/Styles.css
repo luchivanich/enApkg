@@ -1,10 +1,11 @@
 ﻿.card {
+    width: 50%;
+    margin: auto;
     font-family: arial;
     line-height: 1.75em;
     font-size: 20px;
-    text-align: center;
+    text-align: left;
     color: black;
-    background-color: white;
 }
 
 .cloze {
@@ -19,17 +20,14 @@
 }
 
 input#typeans {
-    border-radius: 9px
+    align: left;
+    border-radius: 1px;
 }
 
 .Translation {
     font-family: Lucida Sans Unicode;
     color: gray;
     padding-top: 0.5em;
-}
-
-IMG {
-    border-radius: 19px;
 }
 
 div span {
@@ -40,18 +38,6 @@ div span {
 
 .English {
     padding: 1em;
-}
-
-.English IMG {
-    float: left;
-}
-
-
-/* solarize http://ethanschoonover.com/solarized * http://ospalh.github.io/anki-addons/Scalar.html * http://ospalh.github.io/anki-addons/Compare%20to%20kana.html */
-
-.card {
-    color: black;
-    background-color: #f3f3f3;
 }
 
 #typeans span {
@@ -74,27 +60,4 @@ div span {
 .typeGood {
     color: #2ed85a;
     font-weight: bold;
-}
-
-.ankiru {
-    position: absolute;
-    top: 7px;
-    right: 27px;
-    background: url('_ankiru.png') top right no-repeat;
-    display: block;
-    width: 135px;
-    height: 32px;
-}
-
-.Deck {
-    position: absolute;
-    top: 7px;
-    left: 0px;
-    width: 100%;
-}
-
-#Deck {
-    font-size: 8pt;
-    vertical-align: top;
-    line-height: 10pt;
 }
