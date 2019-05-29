@@ -16,7 +16,7 @@ namespace ApkgCreator
         private string _targetPath;
         private string _targetName;
         private string apkgExtension = ".apkg";
-        private string _media = "{}";
+        private string _media = "";
         private int _mediaCounter = 0;
         private AnkiCol _ankiCol;
 
@@ -38,6 +38,7 @@ namespace ApkgCreator
                 AddCard(card);
             }
             _ankiPackageDbContext.SaveChanges();
+            CreateMediaFile();
             CreateApkgFile();
             CleanupTargetDirectory();
         }
@@ -51,8 +52,6 @@ namespace ApkgCreator
             }
 
             _ankiPackageDbContext.Init(_targetPath);
-
-            File.WriteAllText(Path.Combine(_targetPath, "media"), _media);
 
             _ankiCol = _ankiEntityBuilder.BuildAnkiCol();
 
@@ -78,6 +77,13 @@ namespace ApkgCreator
             }
 
             File.WriteAllBytes(fileFullPath, fileData);
+            AddMedia(fileName);
+        }
+
+        private void CreateMediaFile()
+        {
+            _media = $"{{{_media.Trim(',')}}}";
+            File.WriteAllText(Path.Combine(_targetPath, "media"), _media);
         }
 
         public void CreateApkgFile()
@@ -104,17 +110,9 @@ namespace ApkgCreator
             }
         }
 
-        private void AddMedia(string mediaFile)
+        private void AddMedia(string fileName)
         {
-            _mediaCounter++;
-            if (_mediaCounter > 1)
-            {
-                mediaFile.Insert(mediaFile.Length - 2, ",");
-            }
-
-            mediaFile.Insert(mediaFile.Length - 2, $"\"{_mediaCounter.ToString()}\" : \"{mediaFile.ToString()}\"");
-
-            File.WriteAllText(Path.Combine(_targetPath, "media"), _media);
+            _media += $"\"{fileName}\":\"{fileName}\",";
         }
 
         private void CleanupTargetDirectory()
