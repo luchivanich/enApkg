@@ -23,7 +23,6 @@ namespace ApkgCreator
 
             return new AnkiCol()
             {
-                Id = 1,
                 Created = epoch,
                 Modified = epochMiliseconds,
                 SchemaModeTime = epochMiliseconds,
@@ -183,21 +182,20 @@ namespace ApkgCreator
                     Usn = -1,
                     Flds = new List<Fld>
                     {
-                        CreateFld("№", 0),
-                        CreateFld("IMG", 1),
-                        CreateFld("English", 2),
-                        CreateFld("Keyword", 3),
-                        CreateFld("Transcription", 4, "Lucida Sans Unicode"),
-                        CreateFld("Russian", 5, "Arial Unicode MS"),
-                        CreateFld("Sound", 6),
-                        CreateFld("Examples", 7),
+                        CreateFld("IMG", 0),
+                        CreateFld("Definition", 1),
+                        CreateFld("Keyword", 2),
+                        CreateFld("Transcription", 3, "Lucida Sans Unicode"),
+                        CreateFld("Translation", 4, "Arial Unicode MS"),
+                        CreateFld("Sound", 5),
+                        CreateFld("Examples", 6),
                     },
                     Sortf = 0,
                     Tmpls = new List<Tmpl>
                     {
                         new Tmpl
                         {
-                            Name = "TestTemplate70", // TODO
+                            Name = $"Template{DateTime.Now.ToBinary()}", // TODO
                             Qfmt = File.ReadAllText(@"Templates/QuetionTemplate.htm"),
                             Did = null,
                             Bafmt = string.Empty,

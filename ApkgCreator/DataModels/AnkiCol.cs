@@ -95,5 +95,13 @@ namespace ApkgCreator.DataModels
                 AnkiDeckConfigJson = JsonConvert.SerializeObject(_ankiDeckConfig, new AnkiDeckConfigJsonConverter());
             }
         }
+
+        public void DeserializeProperties()
+        {
+            _ankiModel = JsonConvert.DeserializeObject<AnkiModel>(AnkiModelJson, new AnkiModelJsonConverter());
+            _ankiDeckInfo = JsonConvert.DeserializeObject<AnkiDeckInfo>(AnkiDeckInfoJson, new AnkiDeckInfoJsonConverter());
+            _ankiColConfig = JsonConvert.DeserializeObject<AnkiColConfig>(AnkiColConfigJson);
+            _ankiDeckConfig = JsonConvert.DeserializeObject<AnkiDeckConfig>(AnkiDeckConfigJson, new AnkiDeckConfigJsonConverter());
+        }
     }
 }

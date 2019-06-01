@@ -10,7 +10,9 @@ namespace ApkgCreator.AdditionalModels.Converters
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            var jo = JObject.Load(reader);
+            var deckConfig = jo.First.First.ToObject<DeckConfig>();
+            return new AnkiDeckConfig { DeckConfig = deckConfig };
         }
 
         public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)

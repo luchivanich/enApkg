@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace Cards
+﻿namespace Cards
 {
     public class CardBuilder : ICardBuilder
     {
@@ -13,7 +11,12 @@ namespace Cards
 
         public void BuildCard(Card card)
         {
-            (card.Word, card.Definition, card.Examples, card.AudioFileName, card.AudioFileData) = _dictionaryDataRetriever.GetDictionaryData(card);
+            var word = string.Empty;
+            (word, card.Definition, card.Examples, card.AudioFileName, card.AudioFileData) = _dictionaryDataRetriever.GetDictionaryData(card);
+            if (!string.IsNullOrWhiteSpace(word))
+            {
+                card.Word = word;
+            }
         }
     }
 }

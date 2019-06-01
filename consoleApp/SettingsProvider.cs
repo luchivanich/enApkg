@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Cards;
 using Microsoft.Extensions.Configuration;
 using OxfordDictionaries;
 
@@ -9,7 +8,6 @@ namespace consoleApp
     class SettingsProvider : IOxfordDictionarySettingsProvider
     {
         private const string _appsettingsFile = "appsettings.json";
-        private const string _cardsDatabaseSettingName = "CardsDatabase";
         private const string _oxfordDictionaryCacheDatabaseSettingName = "OxfordDictionaryCacheDatabase";
 
         IConfigurationRoot _configuration;

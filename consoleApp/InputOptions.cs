@@ -1,7 +1,4 @@
 ﻿using CommandLine;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace consoleApp
 {
@@ -12,5 +9,8 @@ namespace consoleApp
 
         [Option('o', "outputPath")]
         public string OutputPath { get; set; }
+
+        [Option('n', "numberOfCardsToProcess")]
+        public int? NumberOfCardsToProcess { get; set; }
     }
 }

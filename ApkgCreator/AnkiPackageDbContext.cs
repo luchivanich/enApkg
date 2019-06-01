@@ -23,7 +23,6 @@ namespace ApkgCreator
         public void Init(string directoryName)
         {
             _directoryName = directoryName;
-            Database.EnsureDeleted();
             Database.EnsureCreated();
         }
         

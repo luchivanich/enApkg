@@ -16,7 +16,8 @@ namespace consoleApp
             var cardsProcessorOptions = new CardsProcessorOptions
             {
                 OutputPath = inputOptions.OutputPath,
-                PathToWordsFile = inputOptions.PathToWordsFile
+                PathToWordsFile = inputOptions.PathToWordsFile,
+                NumberOfCardsToProcess = inputOptions.NumberOfCardsToProcess
             };
 
             _cardsProcessor.ProcessRequest(cardsProcessorOptions);
