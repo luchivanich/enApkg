@@ -25,11 +25,11 @@ namespace CardsBusinessLogic
         public void ProcessRequest(CardsProcessorOptions options)
         {
             _options = options;
-            SaveWordsIntoCardsDb();
+            BuildCards();
             CreateApkgFile();
         }
 
-        private void SaveWordsIntoCardsDb()
+        private void BuildCards()
         {
             var cards = JsonConvert.DeserializeObject<List<Card>>(File.ReadAllText(_options.PathToWordsFile));
             for (var i = 0; i < Math.Min(cards.Count, _options.NumberOfCardsToProcess ?? int.MaxValue); i++)

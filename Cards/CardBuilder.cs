@@ -1,4 +1,7 @@
-﻿namespace Cards
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace Cards
 {
     public class CardBuilder : ICardBuilder
     {
@@ -11,12 +14,28 @@
 
         public void BuildCard(Card card)
         {
-            var word = string.Empty;
-            (word, card.Definition, card.Examples, card.AudioFileName, card.AudioFileData) = _dictionaryDataRetriever.GetDictionaryData(card);
-            if (!string.IsNullOrWhiteSpace(word))
+            (string word, string definition, List<string> examples, string fileName, byte[] fileData) result;
+            result = _dictionaryDataRetriever.GetDictionaryData(card);
+
+            if (!string.IsNullOrWhiteSpace(result.word))
             {
-                card.Word = word;
+                card.Word = result.word;
             }
+
+            if (string.IsNullOrEmpty(card.Definition))
+            {
+                card.Definition = result.definition;
+            }
+
+            if (card.Examples == null)
+            {
+                card.Examples = new List<string>();
+            }
+            card.Examples.AddRange(result.examples ?? new List<string>());
+            card.Examples = card.Examples.Distinct().ToList();
+
+            card.AudioFileName = result.fileName;
+            card.AudioFileData = result.fileData;
         }
     }
 }
