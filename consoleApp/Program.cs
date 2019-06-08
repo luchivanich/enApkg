@@ -19,9 +19,6 @@ namespace consoleApp
                     app.Run(o);
                 }
             });
-
-            Console.WriteLine("Yo! Package created");
-            Console.Read();
         }
     }
 }

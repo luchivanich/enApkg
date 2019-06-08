@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using ApkgCreator.AdditionalModels;
@@ -13,10 +12,13 @@ namespace ApkgCreator
     {
         private const string FIELD_DELIMETER = "\u001f";
 
+        private IResourceManager _resourceManager;
         private Dictionary<string, Func<Card, string>> _fieldBuilders;
 
-        public AnkiFieldsBuilder()
+        public AnkiFieldsBuilder(IResourceManager resourceManager)
         {
+            _resourceManager = resourceManager;
+
             _fieldBuilders = new Dictionary<string, Func<Card, string>>();
             _fieldBuilders.Add("Definition", DefinitionFieldBuilder);
             _fieldBuilders.Add("Keyword", c => c.Word);
@@ -55,8 +57,8 @@ namespace ApkgCreator
             }
 
             var result = string.Empty;
-            var examplesTemplate = File.ReadAllText(@"Templates/Examples.htm");
-            var exampleTemplate = File.ReadAllText(@"Templates/Example.htm");
+            var examplesTemplate = _resourceManager.LoadFromResource(GetType(), "ApkgCreator.Templates.Examples.htm");
+            var exampleTemplate = _resourceManager.LoadFromResource(GetType(), "ApkgCreator.Templates.Example.htm");
             foreach (var example in card.Examples)
             {
                 result += exampleTemplate.Replace("@Example", Regex.Replace(example, card.Word, $"{{{{c1::{card.Word}}}}}", RegexOptions.IgnoreCase));

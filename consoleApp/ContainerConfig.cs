@@ -23,6 +23,7 @@ namespace consoleApp
             builder.RegisterType<OxfordDictionariesRetriever>()
                 .As<IDictionaryDataRetriever>()
                 .SingleInstance();
+            builder.RegisterType<ResourceManager>().As<IResourceManager>();
             builder.RegisterType<AnkiPackageDbContext>().As<IAnkiPackageDbContext>();
             builder.RegisterType<AnkiFieldsBuilder>().As<IAnkiFieldsBuilder>();
             builder.RegisterType<AnkiEntityBuilder>().As<IAnkiEntityBuilder>();

@@ -1,4 +1,5 @@
-﻿using CardsBusinessLogic;
+﻿using System;
+using CardsBusinessLogic;
 
 namespace consoleApp
 {
@@ -20,7 +21,8 @@ namespace consoleApp
                 NumberOfCardsToProcess = inputOptions.NumberOfCardsToProcess
             };
 
-            _cardsProcessor.ProcessRequest(cardsProcessorOptions);
+            Console.WriteLine(_cardsProcessor.ProcessRequest(cardsProcessorOptions).Message);
+            Console.Read();
         }
     }
 }

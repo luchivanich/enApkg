@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using ApkgCreator.AdditionalModels;
 using ApkgCreator.DataModels;
 using Cards;
@@ -9,10 +8,12 @@ namespace ApkgCreator
 {
     public class AnkiEntityBuilder : IAnkiEntityBuilder
     {
+        private IResourceManager _resourceManager;
         private IAnkiFieldsBuilder _ankiFieldsBuilder;
-
-        public AnkiEntityBuilder(IAnkiFieldsBuilder ankiFieldsBuilder)
+        
+        public AnkiEntityBuilder(IResourceManager resourceManager, IAnkiFieldsBuilder ankiFieldsBuilder)
         {
+            _resourceManager = resourceManager;
             _ankiFieldsBuilder = ankiFieldsBuilder;
         }
 
@@ -196,10 +197,10 @@ namespace ApkgCreator
                         new Tmpl
                         {
                             Name = $"Template{DateTime.Now.ToBinary()}", // TODO
-                            Qfmt = File.ReadAllText(@"Templates/QuetionTemplate.htm"),
+                            Qfmt = _resourceManager.LoadFromResource(GetType(), @"ApkgCreator.Templates.QuetionTemplate.htm"),
                             Did = null,
                             Bafmt = string.Empty,
-                            Afmt = File.ReadAllText(@"Templates/AnswerTemplate.htm"),
+                            Afmt = _resourceManager.LoadFromResource(GetType(), @"ApkgCreator.Templates.AnswerTemplate.htm"),
                             Ord = 0,
                             Bqfmt = string.Empty
                         }
@@ -208,7 +209,7 @@ namespace ApkgCreator
                     LatexPost = "\\end{document}",
                     Type = 1,
                     Id = "1397924728875", // TODO: Generate Id,
-                    Css = File.ReadAllText(@"Templates/Styles.css"),
+                    Css = _resourceManager.LoadFromResource(GetType(), "ApkgCreator.Templates.Styles.css"),
                     LatexPre = "\\documentclass[12pt]{article}\n\\special{papersize=3in,5in}\n\\usepackage[utf8]{inputenc}\n\\usepackage{amssymb,amsmath}\n\\pagestyle{empty}\n\\setlength{\\parindent}{0in}\n\\begin{document}\n"
                 }
             };

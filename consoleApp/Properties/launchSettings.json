@@ -2,7 +2,7 @@
   "profiles": {
     "consoleApp": {
       "commandName": "Project",
-      "commandLineArgs": "-p E:\\english\\mine\\jen\\anki\\input\\dealingWithChange.json -o E:\\english\\mine\\jen\\anki\\output\\jen -n 200"
+      "commandLineArgs": "-p E:\\programming\\longman9000\\input\\2019.06.01.First.Run\\highFinal.json -o E:\\programming\\longman9000\\output\\2019.06.01.First.Run -n 300"
     }
   }
 }

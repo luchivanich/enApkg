@@ -42,13 +42,18 @@ namespace OxfordDictionaries
 
         private LexicalEntry RetrieveOdLexicalEntry(IWord word)
         {
-            return _oxfordDictionariesCacheDBContext
+            var result = _oxfordDictionariesCacheDBContext
                 .LexicalEntries
                 .Include(le => le.AudioFile)
-                .FirstOrDefault(l => l.Word.ToLower() == word.Word.ToLower() && (l.LexicalCategory == word.LexicalCategory.ToString() || word.LexicalCategory == null))
-                ??
-                RetrieveLexicalEntriesFromOdApi(word.Word)
-                .FirstOrDefault(l => l.Word.ToLower() == word.Word.ToLower() && l.LexicalCategory == word.LexicalCategory.ToString() || word.LexicalCategory == null);
+                .Where(l => l.Word.ToLower() == word.Word.ToLower())
+                .ToList();
+
+            if (result.Count == 0)
+            {
+                result = RetrieveLexicalEntriesFromOdApi(word.Word);
+            }
+
+            return result.FirstOrDefault(l => l.Word.ToLower() == word.Word.ToLower() && (l.LexicalCategory == word.LexicalCategory.ToString() || word.LexicalCategory == null));
         }
 
         private List<LexicalEntry> RetrieveLexicalEntriesFromOdApi(string word)

@@ -22,11 +22,20 @@ namespace CardsBusinessLogic
             _ankiPackageBuilder = ankiPackageBuilder;
         }
 
-        public void ProcessRequest(CardsProcessorOptions options)
+        public ProcessingMessage ProcessRequest(CardsProcessorOptions options)
         {
-            _options = options;
-            BuildCards();
-            CreateApkgFile();
+            try
+            {
+                _options = options;
+                BuildCards();
+                CreateApkgFile();
+            }
+            catch (Exception e)
+            {
+                return new ProcessingMessage { Message = e.Message };
+            }
+
+            return new ProcessingMessage { Message = "Anki Package is Ready" };
         }
 
         private void BuildCards()
